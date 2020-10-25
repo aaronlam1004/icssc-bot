@@ -1,0 +1,13 @@
+{
+	"documentation": [
+		"__Helper Bot__ is a poorly made bot using the Discord.js framework. It is used to make rooms and do other stupid things in this server.",
+		"**To make a room:** $request [game, dev, study] <@party @list>",
+		"**To flip a coin:** $flip",
+		"**To roll a random number in range <num>:** $rng <num>"
+	], 
+	"channels": {
+		"study": "761009782211215360",
+		"game": "761011907112730645",
+		"dev": "761011443188629544"
+	}
+}

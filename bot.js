@@ -52,22 +52,26 @@ bot.on("message", message => {
 					}
 					break;
 
-				case "$flip":
-					const flip = Math.random()
-					if (flip < .5) {
-						message.reply("Heads");
+				case "$leaderboard":
+					var points = config["bits-and-bytes"];
+					var leaderboard = Object.entries(points).sort(([,a], [,b]) => b - a);
+					var ranking  = "";
+					for (var i = 0; i < leaderboard.length; i++) {
+						ranking += `${i + 1}. ${leaderboard[i][0]} (${leaderboard[i][1]})`;
+						if (i == 0) {
+							ranking += " :star:\n";
+						}
+						else {
+							ranking += "\n";
+						}
 					}
-					else {
-						message.reply("Tails");
-					}
-					break;
 
-				case "$rng":
-					if (content[2] != null) {
-						const num = parseInt(content[2]);
-						message.reply(Math.floor(Math.random() * num - 1) + 1);
-						break;
-					}
+					var leaderboard = new Discord.MessageEmbed();
+					leaderboard.setTitle("Bits-and-Bytes Leaderboard");
+					leaderboard.setColor("#ff3333");
+					leaderboard.setDescription(ranking);
+					message.channel.send(leaderboard);
+					break;
 
 				case "$websoc":
 					var options = content.slice(2);
@@ -112,6 +116,91 @@ bot.on("message", message => {
 							message.channel.send("<@" + message.author.id + ">")
 						});
 					}
+					break;
+
+				case "$secret":
+					if (message.member.voice.channel) {
+						message.member.voice.channel.join().then(connection => {
+							var dispatcher = connection.play("./media/shhh keep it a secret babe.mp3");
+							dispatcher.on("finish", () => {
+								dispatcher.destroy();
+								connection.disconnect();
+							});
+						});
+					}
+					else {
+						message.reply("You must be in a voice channel in order for this command to work.");
+					}
+					break;
+
+				case "❤️":
+					var op = Math.floor(Math.random() * 3) + 1;
+					if (message.member.voice.channel) {
+						message.member.voice.channel.join().then(connection => {
+							var dispatcher = connection.play(`./media/Oregairu${op}.mp3`);
+							dispatcher.setVolume(0.5);
+							dispatcher.on("finish", () => {
+								dispatcher.destroy();
+								connection.disconnect();
+							});
+						});
+					}
+					else {
+						message.reply("You must be in a voice channel in order for this command to work.");
+					}
+					break;
+				
+				case "$waifu":
+					const waifus = {
+						"Yukino Yukinoshita": "./media/waifus/Yukino.png",
+						"Yui Yuigahama": "./media/waifus/Yui.png",
+						"Iroha Isshiki": "./media/waifus/Iroha.png",
+						"Shoko Nishimiya": "./media/waifus/Shoko.jpg",
+						"Mio Natsume": "./media/waifus/Mio.jpg",
+						"Ena Komiya": "./media/waifus/Komiya.jpg",
+						"Mai Sakurajima": "./media/waifus/Mai.jpg",
+						"An Amakasu": "./media/waifus/Amakasu.jpg"
+					};
+					var index = Math.floor(Math.random() * Object.keys(waifus).length);
+					var waifu = Object.keys(waifus)[index];
+					message.reply(`Your current waifu is **${waifu}**!`, {files: [waifus[waifu]]});
+					break;
+
+				case "$bias":
+					var date = new Date();
+					const BTS = {
+						Jin: "./media/bts/Jin.jpg",
+						Suga: "./media/bts/Suga.jpg",
+						"J-Hope": "./media/bts/J-Hope.jpg",
+						RM: "./media/bts/RM.jpg",
+						Jimin: "./media/bts/Jimin.jpg",
+						V: "./media/bts/V.jpg",
+						Jungkook: "./media/bts/Jungkook.jpg"
+					};
+					var index = Math.floor(Math.random() * Object.keys(BTS).length);
+					var stan = Object.keys(BTS)[index];
+					message.reply(`Your current BTS stan is :star:**${stan}**:star:!`, {files: [BTS[stan]]});
+					break;
+
+				case "$flip":
+					const flip = Math.random()
+					if (flip <= .5) {
+						message.reply("Heads");
+					}
+					else {
+						message.reply("Tails");
+					}
+					break;
+
+				case "$rng":
+					if (content[2] != null) {
+						const num = parseInt(content[2]);
+						const roll = Math.floor(Math.random() * (num - 1)) + 1;
+						message.reply(roll);
+					}
+					break;
+
+				
 			}
 		}
 	}

@@ -179,7 +179,7 @@ bot.on("message", message => {
           };
           var index = Math.floor(Math.random() * Object.keys(BTS).length);
           var stan = Object.keys(BTS)[index];
-          message.reply(`Your current BTS stan is :star:**${stan}**:star:!`, {files: [BTS[stan]]});
+          message.reply(`Your current BTS bias is :star:**${stan}**:star:!`, {files: [BTS[stan]]});
           break;
 
         case "$flip":

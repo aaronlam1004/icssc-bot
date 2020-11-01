@@ -1,7 +1,8 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client();
 
-const {websocRequest} = require("./WebSoc.js")
+const {websocRequest} = require("./WebSoc.js");
+const {getLeaderboard} = require("./bitsbytes.js");
 
 require('dotenv').config();
 const config = require("./config.json");
@@ -54,25 +55,28 @@ bot.on("message", message => {
           break;
 
         case "$leaderboard":
-          var leaderboard = Object.entries(bitsbytes).sort(([,a], [,b]) => b - a);
-          var ranking  = "";
-          for (var i = 0; i < leaderboard.length; i++) {
-            ranking += `${i + 1}. ${leaderboard[i][0]} (${leaderboard[i][1]})`;
-            if (i == 0) {
-              ranking += " :star:\n";
+          getLeaderboard((leaderboard) => {
+            var leaderboard = Object.entries(leaderboard).sort(([,a], [,b]) => b - a);
+            var ranking  = "";
+            for (var i = 0; i < leaderboard.length; i++) {
+              ranking += `${i + 1}. ${leaderboard[i][0]} (${leaderboard[i][1]})`;
+              if (i == 0) {
+                ranking += " :star:\n";
+              }
+              else {
+                ranking += "\n";
+              }
             }
-            else {
-              ranking += "\n";
-            }
-          }
 
-          var leaderboard = new Discord.MessageEmbed();
-          leaderboard.setTitle("Bits-and-Bytes Leaderboard");
-          leaderboard.setColor("#ff3333");
-          leaderboard.setDescription(ranking);
-          message.channel.send(leaderboard);
+            var leaderboard = new Discord.MessageEmbed();
+            leaderboard.setTitle("Bits-and-Bytes Leaderboard");
+            leaderboard.setColor("#ff3333");
+            leaderboard.setDescription(ranking);
+            message.channel.send(leaderboard);
+          }); 
+
           break;
-
+          
         case "$websoc":
           var options = content.slice(2);
           var search = {};

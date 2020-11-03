@@ -31,7 +31,7 @@ if (args.length == 2) {
       collection.updateOne({_id: objId}, newValues, (err) => {
         if (err) console.error(err);
         console.log("Successfully loaded backup!");
-        cli.close();
+        client.close();
       });
     });
   }
@@ -77,9 +77,14 @@ if (args.length == 2) {
   }
 }
 else if (args.length == 0) {
-  getLeaderboard((cli, result) => {
-    console.log(result);
-    cli.close();
+  client.connect().then(() => {
+    var db = client.db("bits-and-bytes");
+    var collection = db.collection("leaderboard");
+    collection.find().toArray((err, result) => {
+      if (err) console.err(err);
+      console.log(result[0].teams);
+      client.close();
+    });
   });
 }
 else {

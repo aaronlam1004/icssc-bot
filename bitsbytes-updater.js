@@ -82,7 +82,7 @@ else if (args.length == 0) {
     var collection = db.collection("leaderboard");
     collection.find().toArray((err, result) => {
       if (err) console.err(err);
-      console.log(result[0].teams);
+      console.log(result[0]);
       client.close();
     });
   });

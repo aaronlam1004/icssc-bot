@@ -18,6 +18,4 @@ const getLeaderboard = async function(callback) {
 };
 
 
-
-
 module.exports = {getLeaderboard};

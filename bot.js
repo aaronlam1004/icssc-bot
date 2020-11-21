@@ -69,7 +69,7 @@ bot.on("message", message => {
             }
 
             var leaderboard = new Discord.MessageEmbed();
-            leaderboard.setTitle("Bits-and-Bytes Leaderboard");
+            leaderboard.setTitle("Bits-and-Bytes Temporary Leadeboard (not counted right and not including points for coming to events)");
             leaderboard.setColor("#ff3333");
             leaderboard.setDescription(ranking);
             message.channel.send(leaderboard);

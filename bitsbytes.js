@@ -7,14 +7,14 @@ const url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWOR
 const client = mongo.MongoClient(url, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const getLeaderboard = async function(callback) {
-  client.connect().then(() => {
-    var db = client.db("bits-and-bytes");
-    var collection = db.collection("leaderboard");
-    collection.find().toArray((err, result) => {
-      if (err) console.err(err);
-      return callback(result[0].teams);
+    client.connect().then(() => {
+        var db = client.db("bits-and-bytes");
+        var collection = db.collection("leaderboard");
+        collection.find().toArray((err, result) => {
+            if (err) console.err(err);
+            return callback(result[0].teams);
+        });
     });
-  });
 };
 
 

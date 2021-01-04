@@ -1,26 +1,26 @@
 {
-  "name": "icssc_bot",
-  "version": "1.0.0",
-  "description": "Discord bot for the ICSSC Discord server!",
-  "main": "index.js",
-  "scripts": {
-    "test": "nodemon ./template/bot.js",
-    "start": "nodemon bot.js"
-  },
-  "engines": {
-    "node": "12.x",
-    "npm": "*"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^0.20.0",
-    "cheerio": "^1.0.0-rc.3",
-    "discord.js": "^12.3.1",
-    "dotenv": "^8.2.0",
-    "mongodb": "^3.6.2",
-    "node-opus": "^0.3.3",
-    "nodemon": "^2.0.4",
-    "opusscript": "0.0.7"
-  }
+    "name": "icssc_bot",
+    "version": "1.0.0",
+    "description": "Discord bot for the ICSSC Discord server!",
+    "main": "index.js",
+    "scripts": {
+        "test": "nodemon ./template/bot.js",
+        "start": "nodemon bot.js"
+    },
+    "engines": {
+        "node": "12.x",
+        "npm": "*"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.20.0",
+        "cheerio": "^1.0.0-rc.3",
+        "discord.js": "^12.3.1",
+        "dotenv": "^8.2.0",
+        "mongodb": "^3.6.2",
+        "node-opus": "^0.3.3",
+        "nodemon": "^2.0.4",
+        "opusscript": "0.0.7"
+    }
 }

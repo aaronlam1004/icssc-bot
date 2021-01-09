@@ -4,7 +4,7 @@ ICSSC Bot was made using [Discord.JS](https://discord.js.org/#/) for the ICSSC D
 
 ## Running
 
-Prior to running the bot, you need to do the [basic setup](https://www.sitepoint.com/discord-bot-node-js/)
+Prior to running the bot, you need to do the [basic setup](https://www.sitepoint.com/discord-bot-node-js/).
 
 In the project directory, you can install the dependencies using:
 ### ```npm install```

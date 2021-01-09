@@ -23,7 +23,7 @@ const axios = require('axios');
 // 92: Fall
 var defaultData = {
     Submit: "Display Text Results",
-    YearTerm: "2020-92",
+    YearTerm: "2020-03",
     ShowComments: "off",
     ShowFinals: "on",
     Breadth: "ANY",
@@ -46,6 +46,7 @@ var defaultData = {
     Room: ""
 };
 
+// Makes the WebSoc request given options
 const websocRequest = async function(options = null) {
     var data = defaultData;
     if (options != null) {

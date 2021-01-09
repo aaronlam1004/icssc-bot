@@ -6,6 +6,7 @@ const mongo = require('mongodb');
 const url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@bits-and-bytes.u1suo.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 const client = mongo.MongoClient(url, {useNewUrlParser: true, useUnifiedTopology: true});
 
+// Connect to database and get leaderboard results as an array
 const getLeaderboard = async function(callback) {
     client.connect().then(() => {
         var db = client.db("bits-and-bytes");

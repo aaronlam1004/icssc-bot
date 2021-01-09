@@ -1,26 +1,34 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client();
+const fs = require("fs");
 
 const {websocRequest} = require("./WebSoc.js");
 const {getLeaderboard} = require("./bitsbytes.js");
+const bitsbytes = require("./bitsbytes.json");
 
 require('dotenv').config();
 const config = require("./config.json");
-const bitsbytes = require("./bitsbytes.json");
 
+// When the bot is ready to run
 bot.on("ready", () => {
     console.log("ICSSC bot started!!!");
 });
 
+// When the bot receives a message
 bot.on("message", message => {
-    var content = message.content.split(/ +/);
+    var content = message.content.split(/ +/); // Split the contents of the message by spaces
+
+    // If the first thing in the message is the  mention of the bot
     if (content[0] === "<@!" + bot.user.id + ">") {
+
+        // If the entire content is just the bot mention
         if (content[1] == null) {
             message.reply(config.documentation);
         }
         else {
             switch(content[1])
             {
+                // To make a class text channel (only applices to SCHOOL category)
                 case "$class":
                     if (content[2] != null) {
                         var roomName = content[2];
@@ -32,6 +40,8 @@ bot.on("message", message => {
                         message.reply(`${roomName} has been created.`);
                     }
                     break;
+
+                // To make a transient voice channel for study rooms (only applices to SCHOOL category)
                 case "$study":
                     var roomName = message.author.username + "'s Study Room";
 
@@ -63,29 +73,16 @@ bot.on("message", message => {
                     message.reply("Your room has been created. Please head into your room or else it will be deleted and you will have to request again. Just leave the room once your done and the room will be deleted on it's own.")
                     break;
 
-                case "$leaderboard":
-                    getLeaderboard((leaderboard) => {
-                        var leaderboard = Object.entries(leaderboard).sort(([,a], [,b]) => b - a);
-                        var ranking  = "";
-                        for (var i = 0; i < leaderboard.length; i++) {
-                            ranking += `${i + 1}. ${leaderboard[i][0]} (${leaderboard[i][1]})`;
-                            if (i == 0) {
-                                ranking += " :star:\n";
-                            }
-                            else {
-                                ranking += "\n";
-                            }
-                        }
-
-                        var leaderboard = new Discord.MessageEmbed();
-                        leaderboard.setTitle("Bits-and-Bytes Temporary Leadeboard (not counted right and not including points for coming to events)");
-                        leaderboard.setColor("#ff3333");
-                        leaderboard.setDescription(ranking);
-                        message.channel.send(leaderboard);
-                    }); 
-
+                // Get study break photos
+                case "$break":
+                    fs.readdir("./media/books", (err, books) => {
+                        var bookIndex = Math.floor(Math.random() * Object.keys(books).length);
+                        var book = "./media/books/" + books[bookIndex];
+                        message.reply("You look like you could use a study break!", {files: [book]});
+                    });
                     break;
-                    
+
+                // Does a WebSoc request and gets the results back
                 case "$websoc":
                     var options = content.slice(2);
                     var search = {};
@@ -93,12 +90,17 @@ bot.on("message", message => {
                     if (options.length > 1) {
                         search.Dept = options.slice(0, options.length - 1).join(' ');
 
+                        // Converts ics to I&C SCI
                         if (search.Dept.toLowerCase() == "ics") {
                             search.Dept = "I&C SCI";
                         }
+
+                        // Converts cs to COMPSCI
                         if (search.Dept.toLowerCase() == "cs") {
                             search.Dept = "COMPSCI";
                         }
+
+                        // Every other request needs to be specific WebSoc name (PHYSICS, MATH, etc.)
 
                         search.Dept = search.Dept.toUpperCase();
                         search.CourseNum = options[options.length - 1].toUpperCase();
@@ -131,6 +133,51 @@ bot.on("message", message => {
                     }
                     break;
 
+                // Gets the Bits-and-Bytes leaderboard
+                case "$leaderboard":
+                    getLeaderboard((leaderboard) => {
+                        var leaderboard = Object.entries(leaderboard).sort(([,a], [,b]) => b - a);
+                        var ranking  = "";
+                        for (var i = 0; i < leaderboard.length; i++) {
+                            ranking += `${i + 1}. ${leaderboard[i][0]} (${leaderboard[i][1]})`;
+                            if (i == 0) {
+                                ranking += " :star:\n";
+                            }
+                            else {
+                                ranking += "\n";
+                            }
+                        }
+
+                        var leaderboard = new Discord.MessageEmbed();
+                        leaderboard.setTitle("Bits-and-Bytes Temporary Leadeboard (not counted right and not including points for coming to events)");
+                        leaderboard.setColor("#ff3333");
+                        leaderboard.setDescription(ranking);
+                        message.channel.send(leaderboard);
+                    }); 
+
+                    break;
+
+                // Get a random waifu from a selection
+                case "$waifu":
+                    fs.readdir("./media/waifus", (err, waifus) => {
+                        var index = Math.floor(Math.random() * Object.keys(waifus).length);
+                        var waifu = waifus[index];
+                        var waifuName = waifu.substring(0, waifu.length - 4)
+                        message.reply(`Your current waifu is **${waifuName}**!`, {files: ["./media/waifus/" + waifu]});
+                    });
+                    break;
+
+                // Get your BTS bias
+                case "$bias":
+                    fs.readdir("./media/bts", (err, members) => {
+                        var index = Math.floor(Math.random() * Object.keys(members).length);
+                        var bias = members[index];
+                        var biasName = bias.substring(0, bias.length - 4)
+                        message.reply(`Your current BTS bias is :star:**${biasName}**:star:!`, {files: ["./media/bts/" + bias]});
+                    });
+                    break;
+                
+                // Keep it a secret
                 case "$secret":
                     if (message.member.voice.channel) {
                         message.member.voice.channel.join().then(connection => {
@@ -146,6 +193,8 @@ bot.on("message", message => {
                     }
                     break;
 
+
+                // Play Oregiaru openings randomly
                 case "❤️":
                     var op = Math.floor(Math.random() * 3) + 1;
                     if (message.member.voice.channel) {
@@ -162,39 +211,8 @@ bot.on("message", message => {
                         message.reply("You must be in a voice channel in order for this command to work.");
                     }
                     break;
-                
-                case "$waifu":
-                    const waifus = {
-                        "Yukino Yukinoshita": "./media/waifus/Yukino.png",
-                        "Yui Yuigahama": "./media/waifus/Yui.png",
-                        "Iroha Isshiki": "./media/waifus/Iroha.png",
-                        "Shoko Nishimiya": "./media/waifus/Shoko.jpg",
-                        "Mio Natsume": "./media/waifus/Mio.jpg",
-                        "Ena Komiya": "./media/waifus/Komiya.jpg",
-                        "Mai Sakurajima": "./media/waifus/Mai.jpg",
-                        "An Amakasu": "./media/waifus/Amakasu.jpg"
-                    };
-                    var index = Math.floor(Math.random() * Object.keys(waifus).length);
-                    var waifu = Object.keys(waifus)[index];
-                    message.reply(`Your current waifu is **${waifu}**!`, {files: [waifus[waifu]]});
-                    break;
 
-                case "$bias":
-                    var date = new Date();
-                    const BTS = {
-                        Jin: "./media/bts/Jin.jpg",
-                        Suga: "./media/bts/Suga.jpg",
-                        "J-Hope": "./media/bts/J-Hope.jpg",
-                        RM: "./media/bts/RM.jpg",
-                        Jimin: "./media/bts/Jimin.jpg",
-                        V: "./media/bts/V.jpg",
-                        Jungkook: "./media/bts/Jungkook.jpg"
-                    };
-                    var index = Math.floor(Math.random() * Object.keys(BTS).length);
-                    var stan = Object.keys(BTS)[index];
-                    message.reply(`Your current BTS bias is :star:**${stan}**:star:!`, {files: [BTS[stan]]});
-                    break;
-
+                // Flip a coin
                 case "$flip":
                     const flip = Math.random()
                     if (flip <= .5) {
@@ -205,6 +223,7 @@ bot.on("message", message => {
                     }
                     break;
 
+                // Get a random number up to a user input
                 case "$rng":
                     if (content[2] != null) {
                         const num = parseInt(content[2]);
@@ -219,6 +238,7 @@ bot.on("message", message => {
     }
 });
 
+// Checks to see if there are any members in a voice channel
 function inactiveCheck(channel) {
     if (channel.members.size == 0) {
         channel.delete();
@@ -228,4 +248,5 @@ function inactiveCheck(channel) {
     }
 }
 
+// Start the bot using the CLIENT_TOKEN
 bot.login(process.env.CLIENT_TOKEN);

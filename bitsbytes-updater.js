@@ -12,9 +12,11 @@ const client = mongo.MongoClient(url, {useNewUrlParser: true, useUnifiedTopology
 
 const {getLeaderboard} = require("./bitsbytes.js");
 
-const args = process.argv.slice(2);
+const args = process.argv.slice(2); // Gets command line argument(s) for "node bitsbyte.js"
+
 if (args.length == 2) {
-    if (args[0] == "backup") {
+    // Backs up database with database id to be what it is in bitsbytes.json
+    if (args[0] == "backup") { 
         client.connect().then(() => {
             var db = client.db("bits-and-bytes");
             var collection = db.collection("leaderboard");
@@ -37,13 +39,16 @@ if (args.length == 2) {
     }
     else {
         client.connect().then(() => {
+            // Login into the database in the database server
             var db = client.db("bits-and-bytes");
             var collection = db.collection("leaderboard");
+
             collection.find().toArray((err, res) => {
 
                 if (err) console.err(err);
                 var result = res[0].teams;
 
+                // Add/subtract points to team in the leaderboard database
                 if (Object.keys(result).includes(args[0]) && !isNaN(parseInt(args[1]))) {
                     var updateValues = {};
                     var newValues = {};
@@ -76,6 +81,8 @@ if (args.length == 2) {
         });
     }
 }
+
+// If there are no other command line arguments given, then just print out the database information
 else if (args.length == 0) {
     client.connect().then(() => {
         var db = client.db("bits-and-bytes");
@@ -87,6 +94,8 @@ else if (args.length == 0) {
         });
     });
 }
+
+// If there is 1 other or more than 2 other command line arguments
 else {
     console.log("Not a valid command.");
     console.log(ERROR_STRING);

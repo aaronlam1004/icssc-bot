@@ -1,14 +1,15 @@
 {
     "documentation": [
-        "__Helper Bot__ is a poorly made bot using the Discord.js framework. It is used to make rooms and do other stupid things in this server.",
+        "__waifu__ is a poorly made bot using the Discord.js framework. It is used to make rooms and do other stupid things in this server.",
         "**To make a class chat room:** $class <name>",
-        "**To make a room:** $study <@party @list>",
-        "**To view Bits-and-Bytes leaderboard:** $leaderboard",
+        "**To make a study room:** $study <@party @list>",
+        "**When you need a study break:** $break",
         "**To check class on WebSoc:** $websoc <class name> [ex: ics 31]",
-        "**A secret:** $secret",
-        "**To find out how much of a weeb I am**: :heart:",
+        "**To view Bits-and-Bytes leaderboard:** $leaderboard",
         "**To find your waifu**: $waifu",
         "**To find your BTS bias**: $bias",
+        "**A secret:** $secret",
+        "**To find out how much of a weeb I am**: :heart:",
         "**To flip a coin:** $flip",
         "**To roll a random number in range <num>:** $rng <num>"
     ], 
